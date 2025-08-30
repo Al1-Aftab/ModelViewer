@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.virostarterkit.app-mergeDebugResources-27:/values-w820dp-v13/values-w820dp-v13.xml",
+            "map": [
+                {
+                    "source": "D:\\Work\\ModelViewer\\node_modules\\@reactvision\\react-viro\\android\\viro_renderer\\build\\.transforms\\1bef1cfb1179483c557646e7be4d4760\\transformed\\jetified-viro_renderer-release\\res\\values-w820dp-v13\\values-w820dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "57",
+                        "endOffsets": "108"
+                    }
+                }
+            ]
+        }
+    ]
+}

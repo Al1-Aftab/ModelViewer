@@ -1,0 +1,232 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.virostarterkit"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <queries>
+11-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:2:5-4:15
+12        <package android:name="com.google.ar.core" />
+12-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:3:9-54
+12-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:3:18-51
+13        <package android:name="com.android.vending" />
+13-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:22:9-55
+13-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:22:18-52
+14
+15        <intent>
+15-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:24:9-26:18
+16            <action android:name="com.google.android.play.core.install.BIND_INSTALL_SERVICE" />
+16-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:25:13-96
+16-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:25:21-93
+17        </intent>
+18    </queries>
+19
+20    <uses-permission android:name="android.permission.INTERNET" />
+20-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:6:5-67
+20-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:6:22-64
+21    <uses-permission android:name="android.permission.CAMERA" /> <!-- You may need these if doing any screen recording from within the app -->
+21-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:7:5-65
+21-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:7:22-62
+22    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+22-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:10:5-79
+22-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:10:22-77
+23    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Other camera related features -->
+23-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:11:5-80
+23-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:11:22-78
+24    <uses-feature android:name="android.hardware.camera" />
+24-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:13:5-60
+24-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:13:19-57
+25    <uses-feature
+25-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:14:5-119
+26        android:name="android.hardware.camera.autofocus"
+26-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:14:19-67
+27        android:required="false" /> <!-- Usage of accelerometer and gyroscope -->
+27-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:14:68-92
+28    <uses-feature
+28-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:18:5-124
+29        android:name="android.hardware.sensor.accelerometer"
+29-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:18:19-71
+30        android:required="false" />
+30-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:18:72-96
+31    <uses-feature
+31-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:19:5-120
+32        android:name="android.hardware.sensor.gyroscope"
+32-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:19:19-67
+33        android:required="false" />
+33-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:19:68-92
+34    <!--
+35    This manifest file is used only by Gradle to configure debug-only capabilities
+36    for React Native Apps.
+37    -->
+38    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+38-->[com.facebook.react:react-android:0.73.3] C:\Users\Kazmi\.gradle\caches\transforms-3\ff34738e7fb960ce73fd0d6cf687f2a8\transformed\jetified-react-android-0.73.3-debug\AndroidManifest.xml:16:5-78
+38-->[com.facebook.react:react-android:0.73.3] C:\Users\Kazmi\.gradle\caches\transforms-3\ff34738e7fb960ce73fd0d6cf687f2a8\transformed\jetified-react-android-0.73.3-debug\AndroidManifest.xml:16:22-75
+39    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+39-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Kazmi\.gradle\caches\transforms-3\9b2c28bd5719adb7e465469e2ca76c12\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:5-76
+39-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Kazmi\.gradle\caches\transforms-3\9b2c28bd5719adb7e465469e2ca76c12\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:22-73
+40
+41    <meta-data
+41-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:42:7-79
+42        android:name="com.google.ar.core"
+42-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:42:18-51
+43        android:value="optional" /> <!-- Required for vibration feedback when the trigger action is performed. -->
+43-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:42:52-76
+44    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+44-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:13:5-79
+44-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:13:22-76
+45    <uses-permission android:name="android.permission.VIBRATE" /> <!-- Required for Recording -->
+45-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:14:5-66
+45-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:14:22-63
+46    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Required to detect viewer insertion. -->
+46-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:18:5-71
+46-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:18:22-68
+47    <uses-permission android:name="android.permission.NFC" /> <!-- Indicates use of Android's VR-mode, available only on Android N+. -->
+47-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:21:5-62
+47-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:21:22-59
+48    <uses-feature
+48-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:34:5-36:36
+49        android:name="android.software.vr.mode"
+49-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:35:9-48
+50        android:required="false" /> <!-- Indicates use of VR features that are available only on Daydream-ready devices. -->
+50-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:36:9-33
+51    <uses-feature
+51-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:38:5-40:36
+52        android:name="android.hardware.vr.high_performance"
+52-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:39:9-60
+53        android:required="false" />
+53-->[:viro_renderer] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\viro_renderer\build\.transforms\1bef1cfb1179483c557646e7be4d4760\transformed\jetified-viro_renderer-release\AndroidManifest.xml:40:9-33
+54
+55    <permission
+55-->[androidx.core:core:1.9.0] C:\Users\Kazmi\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+56        android:name="com.virostarterkit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+56-->[androidx.core:core:1.9.0] C:\Users\Kazmi\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+57        android:protectionLevel="signature" />
+57-->[androidx.core:core:1.9.0] C:\Users\Kazmi\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+58
+59    <uses-permission android:name="com.virostarterkit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+59-->[androidx.core:core:1.9.0] C:\Users\Kazmi\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+59-->[androidx.core:core:1.9.0] C:\Users\Kazmi\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+60
+61    <application
+61-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:21:5-44:19
+62        android:name="com.virostarterkit.MainApplication"
+62-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:22:7-38
+63        android:allowBackup="false"
+63-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:26:7-34
+64        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+64-->[androidx.core:core:1.9.0] C:\Users\Kazmi\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+65        android:debuggable="true"
+66        android:extractNativeLibs="false"
+67        android:icon="@mipmap/ic_launcher"
+67-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:24:7-41
+68        android:label="@string/app_name"
+68-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:23:7-39
+69        android:roundIcon="@mipmap/ic_launcher_round"
+69-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:25:7-52
+70        android:supportsRtl="true"
+70-->[:react_viro] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\react_viro\build\.transforms\08fb8ee09b7b46ec550d23474a676d4e\transformed\jetified-react_viro-release\AndroidManifest.xml:13:9-35
+71        android:theme="@style/AppTheme"
+71-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:27:7-38
+72        android:usesCleartextTraffic="true" >
+72-->D:\Work\ModelViewer\android\app\src\debug\AndroidManifest.xml:6:9-44
+73        <activity
+73-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:28:7-40:18
+74            android:name="com.virostarterkit.MainActivity"
+74-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:29:9-37
+75            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+75-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:31:9-118
+76            android:exported="true"
+76-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:34:9-32
+77            android:label="@string/app_name"
+77-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:30:9-41
+78            android:launchMode="singleTask"
+78-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:32:9-40
+79            android:windowSoftInputMode="adjustResize" >
+79-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:33:9-51
+80            <intent-filter>
+80-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:35:9-38:25
+81                <action android:name="android.intent.action.MAIN" />
+81-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:36:13-65
+81-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:36:21-62
+82
+83                <category android:name="android.intent.category.LAUNCHER" />
+83-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:37:13-73
+83-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:37:23-70
+84            </intent-filter>
+85        </activity>
+86
+87        <meta-data
+87-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:42:7-79
+88            android:name="com.google.ar.core"
+88-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:42:18-51
+89            android:value="optional" />
+89-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:42:52-76
+90        <meta-data
+90-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:43:7-98
+91            android:name="com.samsung.android.vr.application.mode"
+91-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:43:18-72
+92            android:value="vr_only" />
+92-->D:\Work\ModelViewer\android\app\src\main\AndroidManifest.xml:43:73-96
+93
+94        <activity
+94-->[com.facebook.react:react-android:0.73.3] C:\Users\Kazmi\.gradle\caches\transforms-3\ff34738e7fb960ce73fd0d6cf687f2a8\transformed\jetified-react-android-0.73.3-debug\AndroidManifest.xml:19:9-21:40
+95            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+95-->[com.facebook.react:react-android:0.73.3] C:\Users\Kazmi\.gradle\caches\transforms-3\ff34738e7fb960ce73fd0d6cf687f2a8\transformed\jetified-react-android-0.73.3-debug\AndroidManifest.xml:20:13-77
+96            android:exported="false" /> <!-- The minimal version code of ARCore APK required for an app using this SDK. -->
+96-->[com.facebook.react:react-android:0.73.3] C:\Users\Kazmi\.gradle\caches\transforms-3\ff34738e7fb960ce73fd0d6cf687f2a8\transformed\jetified-react-android-0.73.3-debug\AndroidManifest.xml:21:13-37
+97        <meta-data
+97-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:32:9-34:41
+98            android:name="com.google.ar.core.min_apk_version"
+98-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:33:13-62
+99            android:value="240350000" /> <!-- This activity is critical for installing ARCore when it is not already present. -->
+99-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:34:13-38
+100        <activity
+100-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:36:9-42:80
+101            android:name="com.google.ar.core.InstallActivity"
+101-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:37:13-62
+102            android:configChanges="keyboardHidden|orientation|screenSize"
+102-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:38:13-74
+103            android:excludeFromRecents="true"
+103-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:39:13-46
+104            android:exported="false"
+104-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:40:13-37
+105            android:launchMode="singleTop"
+105-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:41:13-43
+106            android:theme="@android:style/Theme.Material.Light.Dialog.Alert" />
+106-->[:arcore_client] D:\Work\ModelViewer\node_modules\@reactvision\react-viro\android\arcore_client\build\.transforms\eb61f8b13bfde13c4d43617db572b1d5\transformed\jetified-core-1.43.0\AndroidManifest.xml:42:13-77
+107
+108        <provider
+108-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+109            android:name="androidx.startup.InitializationProvider"
+109-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+110            android:authorities="com.virostarterkit.androidx-startup"
+110-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+111            android:exported="false" >
+111-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+112            <meta-data
+112-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+113                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+113-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+114                android:value="androidx.startup" />
+114-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Kazmi\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+115            <meta-data
+115-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Kazmi\.gradle\caches\transforms-3\71b91ea8216105cda74b0317da307340\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+116                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+116-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Kazmi\.gradle\caches\transforms-3\71b91ea8216105cda74b0317da307340\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+117                android:value="androidx.startup" />
+117-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Kazmi\.gradle\caches\transforms-3\71b91ea8216105cda74b0317da307340\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+118        </provider>
+119
+120        <meta-data
+120-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Kazmi\.gradle\caches\transforms-3\03d018e18e7118763cc731de8f689ba0\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:12:9-14:37
+121            android:name="com.facebook.soloader.enabled"
+121-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Kazmi\.gradle\caches\transforms-3\03d018e18e7118763cc731de8f689ba0\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:13:13-57
+122            android:value="false" />
+122-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Kazmi\.gradle\caches\transforms-3\03d018e18e7118763cc731de8f689ba0\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:14:13-34
+123    </application>
+124
+125</manifest>
