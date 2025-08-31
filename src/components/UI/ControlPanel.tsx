@@ -8,6 +8,7 @@ interface ControlPanelProps {
   onToggleRotateMode: () => void;
   onToggleDragMode: () => void;
   onTogglePlaneDetection: () => void;
+  onToggleModelType: () => void;
   showTools: boolean;
   onToggleShowTools: () => void;
 }
@@ -18,6 +19,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   onToggleRotateMode,
   onToggleDragMode,
   onTogglePlaneDetection,
+  onToggleModelType,
   showTools,
   onToggleShowTools,
 }) => {
@@ -36,8 +38,17 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       {/* Tools panel - only show when toggled on */}
       {showTools && (
         <View style={styles.toolsPanel}>
-          {/* First row - Detection and main tools */}
+          {/* First row - Model Selection */}
           <View style={styles.row}>
+            <TouchableOpacity
+              style={[styles.button, styles.modelButton]}
+              onPress={onToggleModelType}
+            >
+              <Text style={styles.buttonText}>
+                Model: {modes.selectedModelType === 'GLASS' ? 'Glass' : 'Future Car'}
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={[styles.button, modes.planeDetectionMode && styles.buttonActive]}
               onPress={onTogglePlaneDetection}
@@ -46,7 +57,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 {modes.planeDetectionMode ? 'Detection: ON' : 'Detection: OFF'}
               </Text>
             </TouchableOpacity>
+          </View>
 
+          {/* Second row - Scale and main tools */}
+          <View style={styles.row}>
             <TouchableOpacity 
               style={[styles.button, modes.scaleMode && styles.buttonActive]}
               onPress={onToggleScaleMode}
@@ -55,10 +69,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 {modes.scaleMode ? 'Scale: ON' : 'Scale: OFF'}
               </Text>
             </TouchableOpacity>
-          </View>
 
-          {/* Second row - Rotate and Drag */}
-          <View style={styles.row}>
             <TouchableOpacity 
               style={[styles.button, modes.rotateMode && styles.buttonActive]}
               onPress={onToggleRotateMode}
@@ -67,7 +78,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 {modes.rotateMode ? 'Rotate: ON' : 'Rotate: OFF'}
               </Text>
             </TouchableOpacity>
+          </View>
 
+          {/* Third row - Drag */}
+          <View style={styles.row}>
             <TouchableOpacity
               style={[styles.button, modes.dragMode && styles.buttonActive]}
               onPress={onToggleDragMode}
@@ -127,6 +141,9 @@ const styles = StyleSheet.create({
   },
   buttonActive: {
     backgroundColor: 'rgba(0,150,200,0.9)'
+  },
+  modelButton: {
+    backgroundColor: 'rgba(100,50,200,0.7)'
   },
   buttonText: { 
     color: '#fff', 

@@ -11,11 +11,11 @@ export const THROTTLE_INTERVALS = {
 
 export const AR_STATUS_MESSAGES = {
   INITIALIZING: "Initializing AR...",
-  READY_WITH_DETECTION: "AR Ready! Look around to detect planes, then tap to place the glass model.",
+  READY_WITH_DETECTION: "AR Ready! Look around to detect planes, then tap to place models.",
   READY_NO_DETECTION: "AR Ready! Plane detection is OFF.",
   TRACKING_LIMITED: "Move your device slowly to detect surfaces...",
   TRACKING_UNAVAILABLE: "AR tracking unavailable. Check lighting and move the device.",
-  NO_OBJECTS_INSTRUCTION: "Look around to detect planes, then tap to place glass models!"
+  NO_OBJECTS_INSTRUCTION: "Look around to detect planes, then tap to place models!"
 } as const;
 
 export const GESTURE_THRESHOLDS = {
@@ -29,11 +29,34 @@ export const PLANE_DETECTION_CONFIG = {
   ALIGNMENT: "horizontal" as const,
 } as const;
 
+export const PLANE_SCALING_CONFIG = {
+  // Scale object to be this percentage of the smallest plane dimension
+  SCALE_FACTOR: 0.15,
+  // Minimum scale to prevent objects from being too small
+  MIN_SCALE: 0.03,
+  // Maximum scale to prevent objects from being too large
+  MAX_SCALE: 0.4,
+  // Whether to enable plane-based scaling (can be toggled for testing)
+  ENABLED: true,
+} as const;
+
 export const MODEL_CONFIG = {
-  SOURCE: require('../assets/glass_dirt/scene.gltf'),
-  TYPE: "GLTF" as const,
+  GLASS: {
+    SOURCE: require('../assets/glass_dirt/scene.gltf'),
+    TYPE: "GLTF" as const,
+    NAME: "Glass",
+    DESCRIPTION: "Glass Model",
+  },
+  FUTURE_CAR: {
+    SOURCE: require('../assets/future_car/scene.gltf'),
+    TYPE: "GLTF" as const,
+    NAME: "Future Car",
+    DESCRIPTION: "Future Car Model",
+  },
   AMBIENT_LIGHT_INTENSITY: 500,
 } as const;
+
+export const DEFAULT_MODEL_TYPE = 'GLASS' as const;
 
 export const UI_CONFIG = {
   OVERLAY_TOP_MARGIN: 20,

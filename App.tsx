@@ -16,11 +16,17 @@ const App: React.FC = () => {
     toggleDragMode,
     togglePlaneDetection,
     setPlaneDetectionMode,
+    setSelectedModelType,
   } = useARModes();
+
+  const toggleModelType = () => {
+    setSelectedModelType(modes.selectedModelType === 'GLASS' ? 'FUTURE_CAR' : 'GLASS');
+  };
 
   const viroAppProps: ViroAppProps = {
     ...modes,
     setPlaneDetectionMode,
+    setSelectedModelType,
   };
 
   return (
@@ -41,6 +47,7 @@ const App: React.FC = () => {
           onToggleRotateMode={toggleRotateMode}
           onToggleDragMode={toggleDragMode}
           onTogglePlaneDetection={togglePlaneDetection}
+          onToggleModelType={toggleModelType}
           showTools={showTools}
           onToggleShowTools={() => setShowTools(!showTools)}
         />

@@ -5,7 +5,7 @@ import {
   ViroMaterials,
   ViroText,
 } from '@reactvision/react-viro';
-import { PlacedObject, ObjectUpdatePayload, GestureEvent } from '../../types';
+import { PlacedObject, ObjectUpdatePayload } from '../../types';
 import { UpdateThrottler, getShortId } from '../../utils';
 import { 
   MODEL_CONFIG, 
@@ -37,7 +37,7 @@ const ObjectPlacer: React.FC<ObjectPlacerProps> = ({
 
   // Create gesture handlers for individual objects
   const createGestureHandlers = useCallback((objectId: string) => {
-    const handlePinch = (pinchState: number, scaleFactor: number, source: any) => {
+    const handlePinch = (pinchState: number, scaleFactor: number, _source: any) => {
       if (!scaleMode || !throttler.current.shouldUpdate(objectId, THROTTLE_INTERVALS.GESTURE_UPDATE)) {
         return;
       }
@@ -61,7 +61,7 @@ const ObjectPlacer: React.FC<ObjectPlacerProps> = ({
       }
     };
 
-    const handleRotate = (rotateState: number, rotationFactor: number, source: any) => {
+    const handleRotate = (rotateState: number, rotationFactor: number, _source: any) => {
       if (!rotateMode || !throttler.current.shouldUpdate(objectId, THROTTLE_INTERVALS.GESTURE_UPDATE)) {
         return;
       }
@@ -118,24 +118,28 @@ const ObjectPlacer: React.FC<ObjectPlacerProps> = ({
 
   const renderObject = useCallback((obj: PlacedObject) => {
     const gestureHandlers = createGestureHandlers(obj.id);
+    
+    // Get the appropriate model configuration based on object type
+    const modelConfig = obj.modelType === 'FUTURE_CAR' ? MODEL_CONFIG.FUTURE_CAR : MODEL_CONFIG.GLASS;
+    const modelLabel = obj.modelType === 'FUTURE_CAR' ? 'Car' : 'Glass';
 
     return (
       <ViroNode key={obj.id} position={[0, 0, 0]} opacity={1.0}>
         <Viro3DObject
-          source={MODEL_CONFIG.SOURCE}
+          source={modelConfig.SOURCE}
           position={obj.position}
           scale={obj.scale}
           rotation={obj.rotation}
-          type={MODEL_CONFIG.TYPE}
-          onLoadStart={() => console.log(`GLTF loading started for object ${obj.id}`)}
-          onLoadEnd={() => console.log(`GLTF loading completed for object ${obj.id}`)}
-          onError={(error: any) => console.log(`GLTF loading error for object ${obj.id}:`, error)}
+          type={modelConfig.TYPE}
+          onLoadStart={() => console.log(`GLTF loading started for ${obj.modelType} object ${obj.id}`)}
+          onLoadEnd={() => console.log(`GLTF loading completed for ${obj.modelType} object ${obj.id}`)}
+          onError={(error: any) => console.log(`GLTF loading error for ${obj.modelType} object ${obj.id}:`, error)}
           {...gestureHandlers}
         />
         
         {/* Object label */}
         <ViroText
-          text={`Glass ${getShortId(obj.id)}`}
+          text={`${modelLabel} ${getShortId(obj.id)}`}
           scale={UI_CONFIG.TEXT_SCALES.OBJECT_LABEL}
           position={[
             obj.position[0] + UI_CONFIG.POSITIONS.OBJECT_LABEL_OFFSET[0],

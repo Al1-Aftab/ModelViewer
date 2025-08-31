@@ -30,6 +30,7 @@ export interface PlacedObject {
   rotation: [number, number, number];
   scale: [number, number, number];
   type: 'model';
+  modelType: 'GLASS' | 'FUTURE_CAR';
   timestamp: number;
 }
 
@@ -38,6 +39,7 @@ export interface ARModeState {
   rotateMode: boolean;
   dragMode: boolean;
   planeDetectionMode: boolean;
+  selectedModelType: 'GLASS' | 'FUTURE_CAR';
 }
 
 export interface ARTrackingState {
@@ -47,6 +49,7 @@ export interface ARTrackingState {
 
 export interface ViroAppProps extends ARModeState {
   setPlaneDetectionMode: (enabled: boolean | ((prev: boolean) => boolean)) => void;
+  setSelectedModelType: (modelType: 'GLASS' | 'FUTURE_CAR') => void;
 }
 
 export interface PlaneSelectionEvent {

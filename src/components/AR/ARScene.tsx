@@ -28,6 +28,7 @@ const ARScene: React.FC<ARSceneProps> = ({ onTrackingUpdated, ...props }) => {
     scaleMode = false,
     rotateMode = false,
     dragMode = false,
+    selectedModelType = 'GLASS',
     setPlaneDetectionMode,
   } = appProps;
 
@@ -53,7 +54,7 @@ const ARScene: React.FC<ARSceneProps> = ({ onTrackingUpdated, ...props }) => {
 
     console.log('Plane selected - source:', source, 'location:', location, 'hitTestResults:', hitTestResults);
 
-    const newObject = addObject(source, location, hitTestResults);
+    addObject(source, location, hitTestResults, selectedModelType);
 
     // Auto-disable plane detection after placing an object
     if (setPlaneDetectionMode) {

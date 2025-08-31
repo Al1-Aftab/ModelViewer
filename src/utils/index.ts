@@ -1,5 +1,5 @@
-import { PlacedObject, PlaneSelectionEvent } from '../types';
-import { DEFAULT_OBJECT_SCALE, DEFAULT_OBJECT_ROTATION, OBJECT_POSITION_OFFSET } from '../constants';
+import { PlacedObject } from '../types';
+import { DEFAULT_OBJECT_SCALE, DEFAULT_OBJECT_ROTATION, OBJECT_POSITION_OFFSET, PLANE_SCALING_CONFIG } from '../constants';
 
 /**
  * Extracts position from plane selection event
@@ -29,14 +29,74 @@ export const extractPositionFromPlaneEvent = (
 };
 
 /**
+ * Calculates appropriate object scale based on detected plane dimensions
+ */
+export const calculateScaleFromPlane = (source: any): [number, number, number] => {
+  // Check if plane-based scaling is enabled
+  if (!PLANE_SCALING_CONFIG.ENABLED) {
+    return DEFAULT_OBJECT_SCALE;
+  }
+  
+  let scaleFactor = DEFAULT_OBJECT_SCALE[0]; // Default scale
+  
+  try {
+    // Try different possible properties where plane dimensions might be stored
+    let planeWidth: number | undefined;
+    let planeHeight: number | undefined;
+    
+    // Check various possible properties for plane dimensions
+    if (source?.width !== undefined && source?.height !== undefined) {
+      planeWidth = source.width;
+      planeHeight = source.height;
+    } else if (source?.extent?.x !== undefined && source?.extent?.z !== undefined) {
+      // Some AR frameworks use extent for dimensions
+      planeWidth = source.extent.x;
+      planeHeight = source.extent.z;
+    } else if (source?.anchor?.extent?.x !== undefined && source?.anchor?.extent?.z !== undefined) {
+      planeWidth = source.anchor.extent.x;
+      planeHeight = source.anchor.extent.z;
+    }
+    
+    if (planeWidth !== undefined && planeHeight !== undefined) {
+      // Calculate scale as percentage of plane size
+      const planeDimension = Math.min(planeWidth, planeHeight);
+      
+      console.log(`Plane dimensions: ${planeWidth} x ${planeHeight}, using dimension: ${planeDimension}`);
+      
+      // Scale object to be configured percentage of the smallest plane dimension
+      scaleFactor = planeDimension * PLANE_SCALING_CONFIG.SCALE_FACTOR;
+      
+      // Apply constraints to prevent objects that are too small or too large
+      scaleFactor = Math.max(
+        PLANE_SCALING_CONFIG.MIN_SCALE, 
+        Math.min(PLANE_SCALING_CONFIG.MAX_SCALE, scaleFactor)
+      );
+      
+      console.log(`Calculated scale factor: ${scaleFactor}`);
+    } else {
+      console.log('Could not determine plane dimensions, using default scale');
+    }
+  } catch (error) {
+    console.log('Error calculating plane-based scale:', error);
+  }
+  
+  return [scaleFactor, scaleFactor, scaleFactor];
+};
+
+/**
  * Creates a new placed object with default values
  */
-export const createPlacedObject = (position: [number, number, number]): PlacedObject => ({
+export const createPlacedObject = (
+  position: [number, number, number], 
+  scale?: [number, number, number],
+  modelType: 'GLASS' | 'FUTURE_CAR' = 'GLASS'
+): PlacedObject => ({
   id: Date.now().toString(),
   position,
   type: 'model',
+  modelType,
   rotation: DEFAULT_OBJECT_ROTATION,
-  scale: DEFAULT_OBJECT_SCALE,
+  scale: scale || DEFAULT_OBJECT_SCALE,
   timestamp: Date.now(),
 });
 

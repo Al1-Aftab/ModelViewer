@@ -5,9 +5,11 @@ A React Native AR application for placing and interacting with 3D glass models u
 ## Features
 
 - **Plane Detection**: Automatically detect horizontal planes for object placement
-- **Object Placement**: Tap detected planes to place 3D glass models
+- **Multi-Model Support**: Choose between Glass and Future Car 3D models
+- **Object Placement**: Tap detected planes to place selected 3D models
+- **Adaptive Scaling**: Objects automatically scale based on detected plane size for optimal appearance
 - **Gesture Controls**: Scale, rotate, and drag placed objects
-- **Interactive UI**: Toggle between different interaction modes
+- **Interactive UI**: Toggle between different interaction modes and select models
 - **Real-time AR**: Smooth AR tracking and rendering
 
 ## Project Structure
@@ -131,6 +133,22 @@ All configuration values are centralized in `src/constants/`:
 - UI layout parameters
 - Gesture thresholds
 - Status messages
+- Plane-based scaling parameters
+
+### Plane-Based Scaling
+Objects now automatically scale based on the size of detected planes:
+- **Scale Factor**: Objects are sized to 15% of the smallest plane dimension
+- **Min/Max Limits**: Scaling is constrained between 3cm and 40cm (assuming meter units)
+- **Configurable**: All scaling parameters can be adjusted in `PLANE_SCALING_CONFIG`
+- **Fallback**: If plane dimensions can't be determined, uses default scale
+
+### Model Selection
+The app now supports multiple 3D models:
+- **Glass Model**: The original glass/dirt model from the assets
+- **Future Car**: A new futuristic car model
+- **Dynamic Switching**: Use the Model toggle button to switch between models
+- **Individual Scaling**: Each model type gets appropriate scaling based on plane size
+- **Visual Labels**: Placed objects show their model type in the label
 
 ### Customization
 - Modify `MODEL_CONFIG` to change 3D models
