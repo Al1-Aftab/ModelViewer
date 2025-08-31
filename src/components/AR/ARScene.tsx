@@ -1,152 +1,105 @@
-import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import React from 'react';
 import {
-	ViroARScene,
-	ViroAmbientLight,
-	ViroText,
-	ViroTrackingStateConstants
+  ViroARScene,
+  ViroAmbientLight,
+  ViroText,
 } from '@reactvision/react-viro';
-import PlaneDetector from './PlaneDetector';
-import ObjectPlacer from './ObjectPlacer';
+import { PlaneDetector, ObjectPlacer } from './';
+import { useARTracking, usePlacedObjects } from '../../hooks';
+import { ViroAppProps } from '../../types';
+import { MODEL_CONFIG, UI_CONFIG } from '../../constants';
 
 interface ARSceneProps {
-	onTrackingUpdated?: (state: any, reason: any) => void;
+  onTrackingUpdated?: (state: any, reason: any) => void;
+  viroAppProps?: ViroAppProps;
+  sceneNavigator?: {
+    viroAppProps: ViroAppProps;
+  };
 }
 
-const ARScene: React.FC<ARSceneProps> = ({ onTrackingUpdated, ...props }: any) => {
-	// Get plane detection setting from App.tsx
-	const appProps = (props && props.sceneNavigator && props.sceneNavigator.viroAppProps) || props.viroAppProps || {};
-	const planeDetectionMode: boolean = appProps.planeDetectionMode !== false; // default true
-	const scaleMode: boolean = !!appProps.scaleMode;
-	const rotateMode: boolean = !!appProps.rotateMode;
-	const dragMode: boolean = !!appProps.dragMode;
-	const setPlaneDetectionMode = appProps.setPlaneDetectionMode; // Function to disable plane detection
-	
-	const [placedObjects, setPlacedObjects] = useState<any[]>([]);
-	const [statusText, setStatusText] = useState("Initializing AR...");
-	const [trackingReady, setTrackingReady] = useState(false);
+const ARScene: React.FC<ARSceneProps> = ({ onTrackingUpdated, ...props }) => {
+  // Extract app props with proper fallbacks
+  const appProps = (props && props.sceneNavigator && props.sceneNavigator.viroAppProps) || 
+                   props.viroAppProps || 
+                   {} as ViroAppProps;
+  
+  const {
+    planeDetectionMode = false,
+    scaleMode = false,
+    rotateMode = false,
+    dragMode = false,
+    setPlaneDetectionMode,
+  } = appProps;
 
-	// Handle tracking state changes
-	const handleTrackingUpdate = (state: any, reason: any) => {
-		console.log("AR Tracking Update:", state, reason);
+  // Custom hooks for state management
+  const { trackingState, handleTrackingUpdate } = useARTracking(planeDetectionMode);
+  const { placedObjects, addObject, updateObject, deleteObject } = usePlacedObjects();
 
-		if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-			setTrackingReady(true);
-			setStatusText(planeDetectionMode ? 
-				"AR Ready! Look around to detect planes, then tap to place the glass model." :
-				"AR Ready! Plane detection is OFF."
-			);
-		} else if (state === ViroTrackingStateConstants.TRACKING_LIMITED) {
-			setStatusText("Move your device slowly to detect surfaces...");
-		} else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-			setStatusText("AR tracking unavailable. Check lighting and move the device.");
-		}
+  // Handle tracking state changes with parent callback
+  const onTrackingUpdate = (state: any, reason: any) => {
+    handleTrackingUpdate(state, reason);
+    
+    if (onTrackingUpdated) {
+      onTrackingUpdated(state, reason);
+    }
+  };
 
-		// Call parent callback if provided
-		if (onTrackingUpdated) {
-			onTrackingUpdated(state, reason);
-		}
-	};
+  // Handle plane selection and object placement
+  const handlePlaneSelected = (source: any, location: any, hitTestResults: any) => {
+    if (!trackingState.isReady) {
+      console.log('AR not ready yet, ignoring tap');
+      return;
+    }
 
-	// Called when the user taps a detected plane
-	const onPlaneSelected = (source: any, location: any, hitTestResults: any) => {
-		if (!trackingReady) {
-			console.log('AR not ready yet, ignoring tap');
-			return;
-		}
+    console.log('Plane selected - source:', source, 'location:', location, 'hitTestResults:', hitTestResults);
 
-		console.log('Plane selected - source:', source, 'location:', location, 'hitTestResults:', hitTestResults);
+    const newObject = addObject(source, location, hitTestResults);
 
-		// Extract position from the plane tap
-		let position: [number, number, number] = [0, -0.2, -1]; // fallback
+    // Auto-disable plane detection after placing an object
+    if (setPlaneDetectionMode) {
+      console.log('Auto-disabling plane detection after object placement');
+      setPlaneDetectionMode(false);
+    }
+  };
 
-		if (source && Array.isArray(source.position) && source.position.length === 3) {
-			position = source.position as [number, number, number];
-		} else if (source && Array.isArray(source.center) && source.center.length === 3) {
-			position = source.center as [number, number, number];
-		} else if (location && Array.isArray(location.position) && location.position.length === 3) {
-			position = location.position as [number, number, number];
-		} else if (hitTestResults && hitTestResults.length > 0) {
-			const hitResult = hitTestResults[0];
-			if (hitResult && hitResult.transform && Array.isArray(hitResult.transform.position)) {
-				position = hitResult.transform.position as [number, number, number];
-			}
-		}
+  return (
+    <ViroARScene onTrackingUpdated={onTrackingUpdate}>
+      <ViroAmbientLight color="#ffffff" intensity={MODEL_CONFIG.AMBIENT_LIGHT_INTENSITY} />
 
-		// Lift object slightly above the plane to avoid Z-fighting
-		position = [position[0], position[1] + 0.05, position[2]];
+      {/* Status text */}
+      <ViroText
+        text={trackingState.statusText}
+        scale={UI_CONFIG.TEXT_SCALES.STATUS}
+        position={UI_CONFIG.POSITIONS.STATUS_TEXT}
+        style={{
+          fontFamily: "Arial",
+          fontSize: 30,
+          color: "#ffffff",
+          textAlign: "center",
+        }}
+      />
 
-		console.log('Placing glass model at position:', position);
-		Alert.alert('Glass Model Placed!', `New glass model at position: ${JSON.stringify(position)}`);
-
-		// Create new glass model object
-		const newObj = {
-			id: Date.now().toString(),
-			position: position,
-			type: 'model', // Always place the glass model
-			rotation: [0, 0, 0],
-			scale: [0.1, 0.1, 0.1],
-		};
-
-		setPlacedObjects(prev => [...prev, newObj]);
-
-		// Auto-disable plane detection after placing an object
-		if (setPlaneDetectionMode) {
-			console.log('Auto-disabling plane detection after object placement');
-			setPlaneDetectionMode(false);
-		}
-	};
-
-	// Delete an object by id
-	const handleDeleteObject = (id: string) => {
-		setPlacedObjects(prev => prev.filter(o => o.id !== id));
-	};
-
-	// Update an object by id
-	const handleUpdateObject = (id: string, updates: any) => {
-		setPlacedObjects(prev => prev.map(obj => 
-			obj.id === id ? { ...obj, ...updates } : obj
-		));
-	};
-
-	return (
-		<ViroARScene onTrackingUpdated={handleTrackingUpdate}>
-			<ViroAmbientLight color="#ffffff" intensity={500} />
-
-			{/* Status text */}
-			<ViroText
-				text={statusText}
-				scale={[0.2, 0.2, 0.2]}
-				position={[0, 0.5, -1]}
-				style={{
-					fontFamily: "Arial",
-					fontSize: 30,
-					color: "#ffffff",
-					textAlign: "center",
-				}}
-			/>
-
-			{/* Only show plane detector and objects when tracking is ready */}
-			{trackingReady && (
-				<>
-					{/* Show plane detector only when enabled */}
-					{planeDetectionMode && (
-						<PlaneDetector onPlaneSelected={onPlaneSelected} />
-					)}
-					
-					{/* Always show placed objects */}
-					<ObjectPlacer
-						objects={placedObjects}
-						onDeleteObject={handleDeleteObject}
-						onUpdateObject={handleUpdateObject}
-						scaleMode={scaleMode}
-						rotateMode={rotateMode}
-						dragMode={dragMode}
-					/>
-				</>
-			)}
-		</ViroARScene>
-	);
+      {/* Only show plane detector and objects when tracking is ready */}
+      {trackingState.isReady && (
+        <>
+          {/* Show plane detector only when enabled */}
+          {planeDetectionMode && (
+            <PlaneDetector onPlaneSelected={handlePlaneSelected} />
+          )}
+          
+          {/* Always show placed objects */}
+          <ObjectPlacer
+            objects={placedObjects}
+            onDeleteObject={deleteObject}
+            onUpdateObject={updateObject}
+            scaleMode={scaleMode}
+            rotateMode={rotateMode}
+            dragMode={dragMode}
+          />
+        </>
+      )}
+    </ViroARScene>
+  );
 };
 
 export default ARScene;
