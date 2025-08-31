@@ -1,16 +1,16 @@
 # AR Model Viewer
 
-A React Native AR application for placing and interacting with 3D glass models using ViroReact.
+A React Native AR application for placing and interacting with 3D models using ViroReact. Built and tested on Android devices with ARCore support.
 
 ## Features
 
-- **Plane Detection**: Automatically detect horizontal planes for object placement
+- **Horizontal Plane Detection**: Detects horizontal surfaces for object placement
 - **Multi-Model Support**: Choose between Glass and Future Car 3D models
 - **Object Placement**: Tap detected planes to place selected 3D models
-- **Adaptive Scaling**: Objects automatically scale based on detected plane size for optimal appearance
+- **Adaptive Scaling**: Objects automatically scale based on detected plane size
 - **Gesture Controls**: Scale, rotate, and drag placed objects
 - **Interactive UI**: Toggle between different interaction modes and select models
-- **Real-time AR**: Smooth AR tracking and rendering
+- **Real-time AR**: AR tracking and rendering
 
 ## Project Structure
 
@@ -42,118 +42,61 @@ src/
 └── index.ts             # Main exports
 ```
 
-## Architecture Principles
+## Architecture
 
-### 1. **Separation of Concerns**
-- UI components are separated from business logic
-- Custom hooks manage state and side effects
-- Utility functions handle data transformations
+### Components
+- **ARScene**: Main AR scene coordinator
+- **PlaneDetector**: Horizontal plane detection
+- **ObjectPlacer**: 3D object rendering and gesture handling
+- **ControlPanel**: UI controls for modes and model selection
 
-### 2. **Type Safety**
-- Comprehensive TypeScript interfaces for all data structures
-- Strict typing for AR events and transformations
-- Type-safe component props and state
+### State Management
+- **useARModes**: Interaction mode toggles and model selection
+- **useARTracking**: AR session state management
+- **usePlacedObjects**: Object collection and updates
 
-### 3. **Reusability**
-- Modular component design
-- Custom hooks for shared logic
-- Configurable constants for easy customization
+### Configuration
+- **Constants**: Centralized configuration for models, UI, gestures, and scaling
+- **Types**: TypeScript interfaces for type safety
+- **Utils**: Helper functions for plane events and object creation
 
-### 4. **Performance**
-- Throttled gesture updates to prevent jitter
-- Optimized re-renders with useCallback and useMemo
-- Efficient object management
-
-## Key Components
-
-### ARScene
-Main coordinator component that:
-- Manages AR tracking state
-- Handles object placement logic
-- Coordinates between plane detection and object interaction
-
-### PlaneDetector
-Specialized component for:
-- Detecting horizontal surfaces
-- Handling plane selection events
-- Configurable detection parameters
-
-### ObjectPlacer
-Handles 3D object management:
-- Rendering placed objects
-- Gesture recognition (pinch, rotate, drag)
-- Object lifecycle management
-
-### ControlPanel
-User interface component:
-- Mode toggles (scale, rotate, drag, detection)
-- Collapsible interface
-- Visual feedback for active modes
-
-## State Management
-
-### Custom Hooks Architecture
-- `useARModes`: Manages interaction mode toggles
-- `useARTracking`: Handles AR session state and status
-- `usePlacedObjects`: Manages object collection and updates
-
-### Benefits
-- Separation of state logic from UI
-- Reusable state management patterns
-- Easier testing and debugging
-
-## Getting Started
+## Installation & Setup
 
 ### Prerequisites
 - React Native development environment
-- ViroReact setup for AR capabilities
-- Android/iOS device with ARCore/ARKit support
+- ViroReact setup
+- Android device with ARCore support
 
 ### Installation
 ```bash
 npm install
-# For iOS
-cd ios && pod install && cd ..
 ```
 
 ### Running
 ```bash
-# Android
 npm run android
-
-# iOS
-npm run ios
 ```
 
-## Configuration
-
-### Constants
-All configuration values are centralized in `src/constants/`:
-- Model paths and settings
-- UI layout parameters
-- Gesture thresholds
-- Status messages
-- Plane-based scaling parameters
+## Implementation Details
 
 ### Plane-Based Scaling
-Objects now automatically scale based on the size of detected planes:
-- **Scale Factor**: Objects are sized to 15% of the smallest plane dimension
-- **Min/Max Limits**: Scaling is constrained between 3cm and 40cm (assuming meter units)
-- **Configurable**: All scaling parameters can be adjusted in `PLANE_SCALING_CONFIG`
-- **Fallback**: If plane dimensions can't be determined, uses default scale
+- Objects scale to 15% of the smallest detected plane dimension
+- Scale limits: 3cm minimum, 40cm maximum
+- Falls back to default scale if plane data unavailable
 
 ### Model Selection
-The app now supports multiple 3D models:
-- **Glass Model**: The original glass/dirt model from the assets
-- **Future Car**: A new futuristic car model
-- **Dynamic Switching**: Use the Model toggle button to switch between models
-- **Individual Scaling**: Each model type gets appropriate scaling based on plane size
-- **Visual Labels**: Placed objects show their model type in the label
+- Two 3D models: Glass and Future Car (GLTF format)
+- Toggle between models using the purple "Model" button
+- Each placed object remembers its model type
+- Objects labeled with model type and unique ID
 
-### Customization
-- Modify `MODEL_CONFIG` to change 3D models
-- Adjust `UI_CONFIG` for interface styling
-- Update `GESTURE_THRESHOLDS` for interaction sensitivity
+### Controls
+```
+UI Layout:
+Row 1: [Model: Glass/Future Car] [Detection: ON/OFF]
+Row 2: [Scale: ON/OFF] [Rotate: ON/OFF]  
+Row 3: [Drag: ON/OFF]
+```
 
 ## Development Best Practices
 
@@ -174,27 +117,25 @@ The app now supports multiple 3D models:
 
 ## Troubleshooting
 
-### Common Issues
-1. **AR not initializing**: Check device AR capabilities
-2. **Objects not placing**: Verify plane detection is enabled
-3. **Gesture lag**: Adjust throttle intervals in constants
+- **AR not initializing**: Check device ARCore compatibility
+- **Objects not placing**: Enable plane detection mode
+- **Gesture lag**: Normal on lower-end devices
+- **Poor plane detection**: Ensure good lighting and textured surfaces
 
-### Debug Features
-- Console logging for AR events
-- Object placement feedback
-- Tracking state indicators
+## Limitations
 
-## Future Enhancements
+### Platform
+- **Tested only on Android** with ARCore support
+- **iOS not tested** (no Mac/iPhone available for testing)
 
-### Potential Features
-- Multiple model types
-- Object persistence
-- Advanced lighting
-- Social sharing
-- Object physics
+### AR Capabilities
+- **Horizontal planes only** - vertical plane detection not supported
+- **Single plane type** - cannot detect walls or angled surfaces
+- **Lighting dependent** - poor lighting affects plane detection
+- **Surface dependent** - works best on textured surfaces
 
-### Architecture Improvements
-- Error boundary implementation
-- Enhanced testing coverage
-- Performance monitoring
-- Analytics integration
+### Technical
+- **GLTF models only** - other 3D formats not supported
+- **Performance varies** by device capabilities
+- **Memory intensive** with multiple large models
+- **Battery impact** from continuous AR processing
