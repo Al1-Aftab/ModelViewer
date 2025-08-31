@@ -1,158 +1,185 @@
 import React from 'react';
 import {
 	ViroNode,
-	ViroBox,
-	ViroSphere,
+	Viro3DObject,
 	ViroMaterials,
-	ViroText
+	ViroText,
 } from '@reactvision/react-viro';
 
-// Create materials for our 3D objects
-ViroMaterials.createMaterials({
-	cubeMaterial: {
-		diffuseColor: '#ff6b6b',
-		shininess: 2.0,
-	},
-	sphereMaterial: {
-		diffuseColor: '#4ecdc4',
-		shininess: 2.0,
-	},
-	selectedMaterial: {
-		diffuseColor: '#ffe66d',
-		shininess: 2.0,
-	},
-});
-
-type PlacedObject = {
+interface PlacedObject {
 	id: string;
 	position: [number, number, number];
-	type?: string;
-};
+	rotation: [number, number, number];
+	scale: [number, number, number];
+	type: 'cube' | 'sphere' | 'model';
+}
 
-type Props = {
+interface ObjectPlacerProps {
 	objects: PlacedObject[];
-};
+	onDeleteObject: (id: string) => void;
+	onUpdateObject?: (id: string, updates: Partial<PlacedObject>) => void;
+	scaleMode?: boolean;
+	rotateMode?: boolean;
+	dragMode?: boolean;
+}
 
+const ObjectPlacer: React.FC<ObjectPlacerProps> = ({
+	objects,
+	onDeleteObject,
+	onUpdateObject,
+	scaleMode = false,
+	rotateMode = false,
+	dragMode = false,
+}) => {
 
-type ObjectPlacerProps = Props & {
-	onUpdateObject?: (id: string, position: [number, number, number]) => void;
-	// When true, object interaction (drag/delete) is disabled so plane placement can occur
-	disableInteraction?: boolean;
-	// Optional callback when an object should be deleted
-	onDeleteObject?: (id: string) => void;
-};
+	// Track last update times to prevent too frequent updates (anti-jitter)
+	const lastUpdateTimes = React.useRef<{ [key: string]: number }>({});
 
-const ObjectPlacer: React.FC<ObjectPlacerProps> = ({ objects, onUpdateObject, disableInteraction, onDeleteObject }) => {
-	const [selectedId, setSelectedId] = React.useState<string | null>(null);
-
-	// Auto-clear selection after a short timeout to avoid leaving UI in selected state.
-	React.useEffect(() => {
-		if (!selectedId) return;
-		const t = setTimeout(() => setSelectedId(null), 5000);
-		return () => clearTimeout(t);
-	}, [selectedId]);
-
-	// Called when an object is dragged (continuous updates)
-	const handleDrag = (objectId: string, newPosition: [number, number, number]) => {
-		console.log(`Object ${objectId} dragged to:`, newPosition);
-	};
-
-	// Called when drag ends — commit the new position to parent state
-	const handleDragState = (objectId: string, dragState: string, position?: [number, number, number]) => {
-		console.log(`Object ${objectId} drag state:`, dragState, 'pos:', position);
-		if (dragState === 'drag-end' && position && onUpdateObject) {
-			onUpdateObject(objectId, position);
+	// Throttle function to prevent excessive updates
+	const shouldUpdate = (objectId: string, minInterval: number = 50): boolean => {
+		const now = Date.now();
+		const lastUpdate = lastUpdateTimes.current[objectId] || 0;
+		if (now - lastUpdate >= minInterval) {
+			lastUpdateTimes.current[objectId] = now;
+			return true;
 		}
+		return false;
 	};
 
-	// Render different types of objects
-	const renderObject = (obj: PlacedObject, index: number) => {
-		const isEven = index % 2 === 0;
-		const objectType = obj.type || (isEven ? 'cube' : 'sphere');
+	// Create individual gesture handlers for each object to avoid conflicts
+	const createPinchHandler = (objectId: string) => {
+		return (pinchState: any, scaleFactor: number, source: any) => {
+			if (!scaleMode || !shouldUpdate(objectId, 100)) return; // Throttle to max 10 updates/sec
+
+			console.log('Pinch detected on object:', objectId, {
+				state: pinchState,
+				scaleFactor: scaleFactor
+			});
+
+			// Only handle ongoing pinch gestures (state 2)
+			if (pinchState === 2) {
+				const obj = objects.find(o => o.id === objectId);
+				if (obj && onUpdateObject) {
+					let currentScale = obj.scale[0] || 0.1;
+					let currentScaleArray = obj.scale || [0.1, 0.1, 0.1];
+
+					// More stable scaling calculation
+
+					let newScale = currentScale * scaleFactor;
+
+					// Only update if there's a meaningful change
+					let newScaleArray: [number, number, number] = [newScale, newScale, newScale];
+					const hasChanged = true;
+
+					if (hasChanged) {
+						console.log(`Scaling object ${objectId}: ${JSON.stringify(currentScaleArray)} -> ${JSON.stringify(newScaleArray)}`);
+						onUpdateObject(objectId, { scale: newScaleArray });
+					}
+				}
+			}
+		};
+	};
+
+	const createRotateHandler = (objectId: string) => {
+		return (rotateState: any, rotationFactor: number, source: any) => {
+			if (!rotateMode || !shouldUpdate(objectId, 100)) return; // Throttle to max 10 updates/sec
+
+			console.log('Rotation detected on object:', objectId, {
+				state: rotateState,
+				rotationFactor: rotationFactor
+			});
+
+			// Only handle ongoing rotation gestures (state 2)
+			if (rotateState === 2) {
+				const obj = objects.find(o => o.id === objectId);
+				if (obj && onUpdateObject) {
+					const currentRotation = obj.rotation || [0, 0, 0];
+
+					// Apply rotation primarily around Y-axis (vertical) for better UX
+					const newRotation = [
+						currentRotation[0] - rotationFactor,
+						currentRotation[1] - rotationFactor, // Primary Y-axis rotation
+						currentRotation[2] - rotationFactor
+					] as [number, number, number];
+
+					// Only update if there's a meaningful change
+					const threshold = 0.01;
+					const hasChanged = Math.abs(newRotation[1] - currentRotation[1]) > threshold;
+
+					if (hasChanged) {
+						console.log(`Rotating object ${objectId}: ${JSON.stringify(currentRotation)} -> ${JSON.stringify(newRotation)}`);
+						onUpdateObject(objectId, { rotation: newRotation });
+					}
+				}
+			}
+		};
+	};
+
+	const createDragHandler = (objectId: string) => {
+		return (newPosition: [number, number, number]) => {
+			if (!dragMode || !onUpdateObject) return;
+			onUpdateObject(objectId, { position: newPosition });
+		};
+	};
+
+	const renderObject = (obj: PlacedObject) => {
+		// Create unique handlers for this specific object
+		const pinchHandler = createPinchHandler(obj.id);
+		const rotateHandler = createRotateHandler(obj.id);
+		const dragHandler = createDragHandler(obj.id);
 
 		return (
-			<ViroNode
-				key={obj.id}
+			<Viro3DObject
+				source={require('../../assets/glass_dirt/scene.gltf')}
 				position={obj.position}
-				// Keep a stable dragType prop to avoid runtime errors in the native bridge
-				// when toggling interaction on/off. We still ignore drag events when
-				// `disableInteraction` is true, but we don't remove the prop at runtime.
-				dragType={'FixedToWorld'}
-				onDrag={(_src: any, newPos: [number, number, number]) => {
-					// Ignore drag updates when interaction is disabled (plane placement mode).
-					if (disableInteraction) return;
-					handleDrag(obj.id, newPos);
-				}}
-				onDragStateChanged={(_src: any, dragState: string, newPos?: [number, number, number]) => {
-					// When interactions are disabled, ignore drag state updates
-					if (disableInteraction) return;
-					handleDragState(obj.id, dragState, newPos);
-					// Keep selection behavior consistent: when a drag starts, mark selected so user can see controls
-					if (dragState === 'drag-start') {
-						setSelectedId(obj.id);
-					} else if (dragState === 'drag-end') {
-						setSelectedId(prev => prev === obj.id ? null : prev);
-					}
-				}}
-				onClick={(_src: any) => {
-					// Toggle selection on tap, but only when interactions are enabled.
-					if (disableInteraction) return;
-					setSelectedId(prev => prev === obj.id ? null : obj.id);
-				}}
-			>
-				{/* Render cube or sphere based on type */}
-				{objectType === 'cube' ? (
-					<ViroBox
-						materials={[selectedId === obj.id ? 'selectedMaterial' : 'cubeMaterial']}
-						scale={[0.1, 0.1, 0.1]}
-						position={[0, 0.05, 0]} // Slightly above ground
-					/>
-				) : (
-					<ViroSphere
-						materials={[selectedId === obj.id ? 'selectedMaterial' : 'sphereMaterial']}
-						radius={0.05}
-						position={[0, 0.05, 0]} // Slightly above ground
-					/>
-				)}
-
-				{/* If this object is selected, render a small delete control above it */}
-				{selectedId === obj.id && onDeleteObject && (
-					<ViroText
-						text={"Delete"}
-						scale={[0.06, 0.06, 0.06]}
-						position={[0, 0.28, 0]}
-						style={{ color: '#ffe66d', fontSize: 20, textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}
-						onClick={() => {
-							if (onDeleteObject) onDeleteObject(obj.id);
-							setSelectedId(null);
-						}}
-					/>
-				)}
-
-				{/* Optional: Add a label above each object */}
-				<ViroText
-					text={`${objectType} ${index + 1}`}
-					scale={[0.05, 0.05, 0.05]}
-					position={[0, 0.15, 0]}
-					style={{
-						fontFamily: "Arial",
-						fontSize: 20,
-						color: "#ffffff",
-						textAlign: "center",
-					}}
-				/>
-			</ViroNode>
+				scale={obj.scale}
+				rotation={obj.rotation}
+				type="GLTF"
+				onLoadStart={() => console.log(`GLTF loading started for object ${obj.id}`)}
+				onLoadEnd={() => console.log(`GLTF loading completed for object ${obj.id}`)}
+				onError={(error: any) => console.log(`GLTF loading error for object ${obj.id}:`, error)}
+				// Simple tap to delete (only when not in any interaction mode)
+				onClick={!scaleMode && !rotateMode && !dragMode ? () => {
+					console.log(`Deleting object: ${obj.id}`);
+					onDeleteObject(obj.id);
+				} : undefined}
+				// Gesture handlers - each object gets its own isolated handlers
+				onPinch={scaleMode ? pinchHandler : undefined}
+				onRotate={rotateMode ? rotateHandler : undefined}
+				onDrag={dragMode ? dragHandler : undefined}
+			/>
 		);
 	};
 
 	return (
 		<>
-			{objects.map((obj, index) => renderObject(obj, index))}
+			{objects.map((obj) => (
+				<ViroNode
+					key={obj.id}
+					position={[0, 0, 0]}
+					// Isolate each object to prevent gesture interference
+					opacity={1.0}
+				>
+					{renderObject(obj)}
+					{/* Optional: Add a label above each object */}
+					<ViroText
+						text={`Glass ${obj.id.slice(-4)}`} // Show last 4 chars of ID
+						scale={[0.05, 0.05, 0.05]}
+						position={[obj.position[0], obj.position[1] + 0.15, obj.position[2]]}
+						style={{
+							fontFamily: "Arial",
+							fontSize: 20,
+							color: "#ffffff",
+							textAlign: "center",
+						}}
+					/>
+				</ViroNode>
+			))}
 
 			{/* Show instruction text when no objects are placed */}
 			{objects.length === 0 && (
 				<ViroText
-					text="Look around to detect planes, then tap to place objects!"
+					text="Look around to detect planes, then tap to place glass models!"
 					scale={[0.15, 0.15, 0.15]}
 					position={[0, -0.3, -1]}
 					style={{
@@ -166,5 +193,15 @@ const ObjectPlacer: React.FC<ObjectPlacerProps> = ({ objects, onUpdateObject, di
 		</>
 	);
 };
+
+// Create materials (though not used in this simplified version)
+ViroMaterials.createMaterials({
+	blue: {
+		diffuseColor: "#0000ff",
+	},
+	red: {
+		diffuseColor: "#ff0000",
+	},
+});
 
 export default ObjectPlacer;
